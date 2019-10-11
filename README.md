@@ -7,4 +7,8 @@ London Stock Exchange Market Cap
 
 This app is hosted at <https://neyana31.shinyapps.io/C09W04/>
 
+The presentation for this application for Coursera is at <https://srotaswati.github.io/Shiny_StockMarket/C09W04-rpubs.html>
+
 Data Source  <https://www.londonstockexchange.com/statistics/companies-and-issuers/companies-and-issuers.htm>.
+
+
