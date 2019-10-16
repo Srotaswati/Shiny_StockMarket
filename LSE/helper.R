@@ -2,6 +2,7 @@ library(openxlsx)
 library(dplyr)
 library(scales)
 library(ggplot2)
+library(rvest)
 
 # Get the list of stocks for dropdown
 if(!file.exists("./data/lse_sept19.xlsx")){
@@ -48,3 +49,29 @@ plot_graph<-function(xvalue){
   names(group)<-c("x","y")
   group%>%ggplot(aes(x=x,y=y))+geom_col(fill="lightblue",color="grey")+ggtitle(paste("Market Capitalization by",xvalue))+theme(axis.title.x=element_blank())+scale_y_continuous(labels = comma)+ylab(paste("\u00a3"," m"))+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
+
+get_ticker<-function(name,root=TRUE){
+  url = URLencode(paste0("https://www.google.com/search?q=",name,"+ ticker"))
+  page<-xml2::read_html(url)
+  nodes<-html_nodes(page,"a")
+  links<-html_attr(nodes,"href")
+  link<-links[startsWith(links,"/url?q=https://uk.finance.yahoo.com/quote/")][1]
+  link<-read.table(text=link,sep="/",as.is = TRUE)$V6
+  if(is.null(link)){
+    link<-links[startsWith(links,"/url?q=https://www.albion.capital")][1]
+    link<-read.table(text=link,sep="/",as.is = TRUE)$V6
+    link<-paste0(gsub("&(.*)","",link),".L")
+  }
+  if(link==".L"){
+    link<-links[startsWith(links,"/url?q=https://finance.yahoo.com/quote/")][1]
+    link<-read.table(text=link,sep="/",as.is = TRUE)$V6
+  }
+  if(is.null(link)){
+    link<-links[startsWith(links,"/url?q=https://uk.advfn.com/stock-market/london")][1]
+    link<-read.table(text=link,sep="/",as.is = TRUE)$V7
+    link<-paste0(substr(link,regexpr("-[^-]*$", link)+1,nchar(link)),".L")
+  }
+  link
+}
+  
+

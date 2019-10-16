@@ -8,20 +8,40 @@
 #
 
 library(shiny)
+library(quantmod)
 source("helper.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-    output$cap <- reactive({
+    output$cap <- renderText({
         if(input$type)
-            mcap(input$stock,NULL)
+            paste("<font size = 10px><b>",mcap(input$stock,NULL),"</font></b>")
         else
-            mcap(NULL,input$industry)
+            paste("<font size = 10px><b>",mcap(NULL,input$industry),"</font></b>")
                
     })
-    output$graph<-renderPlot((
+    output$graph<-renderPlot({
         plot_graph(input$xvalue)
-    ))
+    })
+    ticker<-eventReactive(input$action,{
+        get_ticker(input$stock2)
+    })
+    output$tick<-renderText({
+        ticker()
+    })
+    output$heading<-eventReactive(input$action,{
+        paste("<font size = 5px><b>","Monthly time series data of stock","</font></b>")
+    })
+    from.dat<-reactive({as.Date(input$selDateRange[1],format = "%Y-%m-%d")})
+    to.dat<-reactive({as.Date(input$selDateRange[2],format = "%Y-%m-%d")})
+    output$graph2<-renderPlot({
+        dat<-na.omit(getSymbols(ticker(),from=from.dat(),to=to.dat(),auto.assign = FALSE))
+        mdat<-to.monthly(dat)
+        opendat<-Op(mdat)
+        ts1<-ts(opendat,frequency = 12)
+        plot(ts1,ylab=paste(ticker(),"Closing Value"),xlab="Years+1")
+    })
+        
 })
         
 
