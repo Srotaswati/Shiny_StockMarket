@@ -3,7 +3,10 @@ library(shiny)
 
 category<-c("ICB.Industry","ICB.Super-Sector","International.Issuer")
 shinyUI(fluidPage(
-
+    
+    tags$head(
+        tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css")
+    ),
     # Application title
     titlePanel("London Stock Exchange"),
 
@@ -70,8 +73,11 @@ shinyUI(fluidPage(
                         plotOutput("graph2")
                     )
                 )
-            )
+            ),
+            tabPanel(
+                "Documentation",fluid=TRUE,
+                     includeMarkdown("doc.Rmd")
             
         )
     )
-)
+))
