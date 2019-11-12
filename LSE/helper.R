@@ -5,9 +5,9 @@ library(ggplot2)
 library(rvest)
 
 # Get the list of stocks for dropdown
- 
-if(format(Sys.Date(),"%d")=='1'){
-  if(file.exists("./data/lse.xlsx"))unlink("./data/lse.xlsx") 
+
+if(file.exists("./data/lse.xlsx")){
+  unlink("./data/lse.xlsx") 
   fileurl<-"https://www.londonstockexchange.com/statistics/companies-and-issuers/companies-defined-by-mifir-identifiers-list-on-lse.xlsx"
   download.file(fileurl,destfile = "./data/lse.xlsx",method="curl")
 }
