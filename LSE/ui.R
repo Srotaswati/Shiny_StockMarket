@@ -33,7 +33,7 @@ shinyUI(fluidPage(
                         tags$head(
                             tags$style(HTML("hr {border-top: 1px solid #000000;}"))
                         ),
-                        h5(strong("Market Capitalization as of 30th Sept 2019")),
+                        htmlOutput("datedisplay"),
                         htmlOutput("cap")
                     ),
                     mainPanel(

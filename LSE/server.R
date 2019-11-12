@@ -13,6 +13,9 @@ source("helper.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+    output$datedisplay<-renderText({
+        paste("<font size = 2px><b>","Market Capitalization",datedisp(),"</font></b>")  
+    })
     output$cap <- renderText({
         if(input$type)
             paste("<font size = 10px><b>",mcap(input$stock,NULL),"</font></b>")

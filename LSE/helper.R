@@ -5,12 +5,22 @@ library(ggplot2)
 library(rvest)
 
 # Get the list of stocks for dropdown
-if(!file.exists("./data/lse_sept19.xlsx")){
+ 
+if(format(Sys.Date(),"%d")=='1'){
+  if(file.exists("./data/lse.xlsx"))unlink("./data/lse.xlsx") 
   fileurl<-"https://www.londonstockexchange.com/statistics/companies-and-issuers/companies-defined-by-mifir-identifiers-list-on-lse.xlsx"
-  download.file(fileurl,destfile = "./data/lse_sept19.xlsx",method="curl")
+  download.file(fileurl,destfile = "./data/lse.xlsx",method="curl")
 }
-data<-read.xlsx("./data/lse_sept19.xlsx",sheet = 1,startRow = 6,colNames = TRUE)
+data<-read.xlsx("./data/lse.xlsx",sheet = 1,startRow = 6,colNames = TRUE)
 data<-na.omit(data)
+ndate<-read.xlsx("./data/lse.xlsx",sheet = 1)
+ndate<-ndate[1,1]
+
+#Returns latest date{
+datedisp<-function(){
+  ndate
+}
+
 
 # Returns list of stocks
 stockdf<-function(){
