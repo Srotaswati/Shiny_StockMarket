@@ -8,7 +8,7 @@ library(rvest)
 
 if(file.exists("./data/lse.xlsx")){
   unlink("./data/lse.xlsx") 
-  fileurl<-"https://www.londonstockexchange.com/statistics/companies-and-issuers/companies-defined-by-mifir-identifiers-list-on-lse.xlsx"
+  fileurl<-"https://docs.londonstockexchange.com/sites/default/files/reports/Issuer%20list_82.xlsx"
   download.file(fileurl,destfile = "./data/lse.xlsx",method="curl")
 }
 data<-read.xlsx("./data/lse.xlsx",sheet = 1,startRow = 6,colNames = TRUE)
